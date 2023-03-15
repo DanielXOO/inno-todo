@@ -8,7 +8,11 @@ import {
 } from '@mui/material';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 
-const Password: React.FC = () => {
+const Password: React.FC<{
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  password: string;
+  label: string;
+}> = (props) => {
   const [isPassword, setIsPassword] = useState<boolean>(true);
 
   const onChangeVisibility = (): void => {
@@ -21,9 +25,13 @@ const Password: React.FC = () => {
       sx={{ width: '70%', margin: '5px' }}
       variant="outlined"
     >
-      <InputLabel htmlFor="password">Password</InputLabel>
+      <InputLabel htmlFor="password">{props.label}</InputLabel>
       <OutlinedInput
         id="password"
+        value={props.password}
+        onChange={(e) => {
+          props.setPassword(e.target.value);
+        }}
         type={isPassword ? 'password' : 'text'}
         endAdornment={
           <InputAdornment position="end">
@@ -35,7 +43,7 @@ const Password: React.FC = () => {
             </IconButton>
           </InputAdornment>
         }
-        label="Password"
+        label={props.label}
       ></OutlinedInput>
     </FormControl>
   );
