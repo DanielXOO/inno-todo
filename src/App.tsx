@@ -8,8 +8,8 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/registration" element={<RegisterForm />} />
+        <Route path="/signin" element={<LoginForm />} />
+        <Route path="/signup" element={<RegisterForm />} />
       </Routes>
     </BrowserRouter>
   );

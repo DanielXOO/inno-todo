@@ -1,21 +1,24 @@
 import React from 'react';
 import { TextField } from '@mui/material';
+import { type ControllerRenderProps, type FieldErrors } from 'react-hook-form';
+import type UserSignUp from '../models/UserSignUp';
+import type User from '../models/User';
+
+type UserProps = User | UserSignUp;
 
 const Email: React.FC<{
-  setEmail: React.Dispatch<React.SetStateAction<string>>;
-  email: string;
-}> = (props) => {
+  field: ControllerRenderProps<UserProps, 'email'>;
+  errors: FieldErrors<UserProps>;
+}> = (data) => {
   return (
     <TextField
-      id="email"
+      {...data.field}
       variant="outlined"
       label="Email"
       margin="normal"
       size="small"
-      value={props.email}
-      onChange={(e) => {
-        props.setEmail(e.target.value);
-      }}
+      error={!(data.errors.email == null)}
+      helperText={data.errors.email?.message}
       sx={{
         width: '70%'
       }}

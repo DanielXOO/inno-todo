@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import Logo from '../assets/images/logo.png';
 import Email from '../components/Email';
 import Password from '../components/Password';
+import { Controller, useForm } from 'react-hook-form';
+import type UserSignUp from '../models/UserSignUp';
+import userSignUpScheme from '../schemas/UserSignUpScheme';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 const RegisterForm: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
+
+  const onSubmit = async (data: UserSignUp): Promise<void> => {
+    console.log(data);
+  };
 
   return (
     <Box
@@ -15,6 +25,8 @@ const RegisterForm: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
       sx={{ width: '100%' }}
     >
       <Box
@@ -28,7 +40,6 @@ const RegisterForm: React.FC = () => {
           borderRadius: '15px',
           boxShadow: 3
         }}
-        component="form"
         pb="50px"
         pt="50px"
       >
@@ -36,19 +47,30 @@ const RegisterForm: React.FC = () => {
         <Typography variant="h4" align="center" m="10px">
           InnoToDo
         </Typography>
-        <Email setEmail={setEmail} email={email} />
-        <Password
-          setPassword={setPassword}
-          password={password}
-          label="Password"
+        <Controller
+          render={({ field }) => <Email field={field} errors={errors} />}
+          control={control}
+          defaultValue=""
+          name="email"
         />
-        <Password
-          setPassword={setPasswordConfirm}
-          password={passwordConfirm}
-          label="Password confirmation"
+        <Controller
+          render={({ field }) => (
+            <Password label="Password" field={field} errors={errors} />
+          )}
+          control={control}
+          defaultValue=""
+          name="password"
+        />
+        <Controller
+          render={({ field }) => (
+            <Password label="Confirm password" field={field} errors={errors} />
+          )}
+          control={control}
+          defaultValue=""
+          name="repeatPassword"
         />
         <Link
-          href="/login"
+          href="/signin"
           sx={{
             marginTop: '5px'
           }}
@@ -56,6 +78,7 @@ const RegisterForm: React.FC = () => {
           Log in
         </Link>
         <Button
+          type="submit"
           variant="contained"
           sx={{
             marginTop: '25px'

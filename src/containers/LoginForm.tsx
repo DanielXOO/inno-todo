@@ -1,12 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import Email from '../components/Email';
 import Password from '../components/Password';
 import Logo from '../assets/images/logo.png';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import userSignInScheme from '../schemas/UserSignInScheme';
+import type User from '../models/User';
 
 const LoginForm: React.FC = () => {
-  const [email, setUserEmail] = useState('');
-  const [password, setUserPassword] = useState('');
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm<User>({
+    resolver: yupResolver(userSignInScheme)
+  });
+
+  const onSubmit = async (data: User): Promise<void> => {
+    console.log(data);
+  };
 
   return (
     <Box
@@ -14,6 +27,8 @@ const LoginForm: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
       sx={{ width: '100%' }}
     >
       <Box
@@ -27,7 +42,6 @@ const LoginForm: React.FC = () => {
           borderRadius: '15px',
           boxShadow: 3
         }}
-        component="form"
         pb="50px"
         pt="50px"
       >
@@ -35,14 +49,23 @@ const LoginForm: React.FC = () => {
         <Typography variant="h4" align="center" m="10px">
           InnoToDo
         </Typography>
-        <Email setEmail={setUserEmail} email={email} />
-        <Password
-          setPassword={setUserPassword}
-          password={password}
-          label="Password"
+
+        <Controller
+          render={({ field }) => <Email field={field} errors={errors} />}
+          name="email"
+          defaultValue=""
+          control={control}
+        />
+        <Controller
+          render={({ field }) => (
+            <Password label="Password" field={field} errors={errors} />
+          )}
+          name="password"
+          defaultValue=""
+          control={control}
         />
         <Link
-          href="/registration"
+          href="/signup"
           sx={{
             marginTop: '5px'
           }}
@@ -50,6 +73,7 @@ const LoginForm: React.FC = () => {
           Sign Up
         </Link>
         <Button
+          type="submit"
           variant="contained"
           sx={{
             marginTop: '25px'
