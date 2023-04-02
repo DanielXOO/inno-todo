@@ -4,9 +4,10 @@ import Logo from '../assets/images/logo.png';
 import Email from '../components/Email';
 import Password from '../components/Password';
 import { Controller, useForm } from 'react-hook-form';
-import type UserSignUp from '../models/UserSignUp';
+import type UserSignUp from '../models/user/UserSignUp';
 import userSignUpScheme from '../schemas/UserSignUpScheme';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '../auth/AuthProvider';
 
 const RegisterForm: React.FC = () => {
   const {
@@ -15,8 +16,10 @@ const RegisterForm: React.FC = () => {
     formState: { errors }
   } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
 
+  const { signUp } = useAuth();
+
   const onSubmit = async (data: UserSignUp): Promise<void> => {
-    console.log(data);
+    await signUp(data.email, data.password);
   };
 
   return (

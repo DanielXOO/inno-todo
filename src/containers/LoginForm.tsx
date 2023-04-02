@@ -6,7 +6,8 @@ import Logo from '../assets/images/logo.png';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import userSignInScheme from '../schemas/UserSignInScheme';
-import type User from '../models/User';
+import type User from '../models/user/User';
+import { useAuth } from '../auth/AuthProvider';
 
 const LoginForm: React.FC = () => {
   const {
@@ -17,8 +18,10 @@ const LoginForm: React.FC = () => {
     resolver: yupResolver(userSignInScheme)
   });
 
+  const { signIn } = useAuth();
+
   const onSubmit = async (data: User): Promise<void> => {
-    console.log(data);
+    await signIn(data.email, data.password);
   };
 
   return (

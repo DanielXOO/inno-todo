@@ -9,8 +9,8 @@ import {
 } from '@mui/material';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 import { type ControllerRenderProps, type FieldErrors } from 'react-hook-form';
-import type UserSignUp from '../models/UserSignUp';
-import type User from '../models/User';
+import type UserSignUp from '../models/user/UserSignUp';
+import type User from '../models/user/User';
 
 type UserRenderProps =
   | ControllerRenderProps<UserSignUp, 'repeatPassword'>
