@@ -8,10 +8,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import userSignInScheme from '../schemas/UserSignInScheme';
 import type User from '../models/user/User';
 import { useAuth } from '../auth/AuthProvider';
+import { authErrors } from '../auth/AuthErrors';
+import { type FirebaseError } from 'firebase/app';
 
 const LoginForm: React.FC = () => {
   const {
     handleSubmit,
+    setError,
     control,
     formState: { errors }
   } = useForm<User>({
@@ -21,7 +24,18 @@ const LoginForm: React.FC = () => {
   const { signIn } = useAuth();
 
   const onSubmit = async (data: User): Promise<void> => {
-    await signIn(data.email, data.password);
+    try {
+      await signIn(data.email, data.password);
+    } catch (_error: any) {
+      const error: FirebaseError = _error;
+      switch (error.code) {
+        case authErrors.USER_NOT_FOUND:
+        case authErrors.WRONG_PASSWORD:
+          setError('email', { message: 'Email or password is incorrect' });
+          setError('password', { message: 'Email or password is incorrect' });
+          break;
+      }
+    }
   };
 
   return (

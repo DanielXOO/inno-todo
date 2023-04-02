@@ -27,10 +27,10 @@ const signUp = async (
   await createUserWithEmailAndPassword(auth, email, password);
 
 export const AuthContext = React.createContext<AuthContextModel>({
-  auth: auth,
+  auth,
   user: null,
-  signIn: signIn,
-  signUp: signUp
+  signIn,
+  signUp
 });
 
 export interface AuthProviderProps {

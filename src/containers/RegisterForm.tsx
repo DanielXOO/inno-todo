@@ -8,18 +8,30 @@ import type UserSignUp from '../models/user/UserSignUp';
 import userSignUpScheme from '../schemas/UserSignUpScheme';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '../auth/AuthProvider';
+import { type FirebaseError } from 'firebase/app';
+import { authErrors } from '../auth/AuthErrors';
 
 const RegisterForm: React.FC = () => {
   const {
     handleSubmit,
     control,
+    setError,
     formState: { errors }
   } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
 
   const { signUp } = useAuth();
 
   const onSubmit = async (data: UserSignUp): Promise<void> => {
-    await signUp(data.email, data.password);
+    try {
+      await signUp(data.email, data.password);
+    } catch (_error: any) {
+      const error: FirebaseError = _error;
+      switch (error.code) {
+        case authErrors.ALREADY_EXISTS:
+          setError('email', { message: 'User already exists' });
+          break;
+      }
+    }
   };
 
   return (
