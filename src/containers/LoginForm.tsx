@@ -31,7 +31,7 @@ const LoginForm: React.FC = () => {
       switch (error.code) {
         case authErrors.USER_NOT_FOUND:
         case authErrors.WRONG_PASSWORD:
-          setError('email', { message: 'Email or password is incorrect' });
+          setError('email', { message: '' });
           setError('password', { message: 'Email or password is incorrect' });
           break;
       }
