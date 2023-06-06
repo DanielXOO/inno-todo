@@ -1,6 +1,11 @@
 import React from 'react';
-import type ILoaderProps from '../models/loader/ILoaderProps';
 import { Alert, CircularProgress } from '@mui/material';
+
+interface ILoaderProps {
+  children: React.ReactElement | React.ReactElement[] | string;
+  isLoading: boolean;
+  error?: string;
+}
 
 const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
   if (error !== null && error !== undefined) {
