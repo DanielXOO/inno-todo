@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import Logo from '../assets/images/logo.png';
 import Email from '../components/Email';
 import Password from '../components/Password';
+import { Controller, useForm } from 'react-hook-form';
+import type UserSignUp from '../models/user/UserSignUp';
+import userSignUpScheme from '../schemas/UserSignUpScheme';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '../auth/AuthProvider';
+import { type FirebaseError } from 'firebase/app';
+import { authErrors } from '../auth/AuthErrors';
 
 const RegisterForm: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const {
+    handleSubmit,
+    control,
+    setError,
+    formState: { errors }
+  } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
+
+  const { signUp } = useAuth();
+
+  const onSubmit = async (data: UserSignUp): Promise<void> => {
+    try {
+      await signUp(data.email, data.password);
+    } catch (_error: any) {
+      const error: FirebaseError = _error;
+      switch (error.code) {
+        case authErrors.ALREADY_EXISTS:
+          setError('email', { message: 'User already exists' });
+          break;
+      }
+    }
+  };
 
   return (
     <Box
@@ -15,6 +40,8 @@ const RegisterForm: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      component="form"
+      onSubmit={handleSubmit(onSubmit)}
       sx={{ width: '100%' }}
     >
       <Box
@@ -28,7 +55,6 @@ const RegisterForm: React.FC = () => {
           borderRadius: '15px',
           boxShadow: 3
         }}
-        component="form"
         pb="50px"
         pt="50px"
       >
@@ -36,19 +62,30 @@ const RegisterForm: React.FC = () => {
         <Typography variant="h4" align="center" m="10px">
           InnoToDo
         </Typography>
-        <Email setEmail={setEmail} email={email} />
-        <Password
-          setPassword={setPassword}
-          password={password}
-          label="Password"
+        <Controller
+          render={({ field }) => <Email field={field} errors={errors} />}
+          control={control}
+          defaultValue=""
+          name="email"
         />
-        <Password
-          setPassword={setPasswordConfirm}
-          password={passwordConfirm}
-          label="Password confirmation"
+        <Controller
+          render={({ field }) => (
+            <Password label="Password" field={field} errors={errors} />
+          )}
+          control={control}
+          defaultValue=""
+          name="password"
+        />
+        <Controller
+          render={({ field }) => (
+            <Password label="Confirm password" field={field} errors={errors} />
+          )}
+          control={control}
+          defaultValue=""
+          name="repeatPassword"
         />
         <Link
-          href="/login"
+          href="/signin"
           sx={{
             marginTop: '5px'
           }}
@@ -56,6 +93,7 @@ const RegisterForm: React.FC = () => {
           Log in
         </Link>
         <Button
+          type="submit"
           variant="contained"
           sx={{
             marginTop: '25px'
