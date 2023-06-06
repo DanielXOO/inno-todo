@@ -2,10 +2,10 @@ import React, { type ReactNode, useContext, useEffect, useState } from 'react';
 import type AuthContextState from '../models/auth/AuthContextState';
 import type AuthContextModel from '../models/auth/AuthContextModel';
 import {
-  type UserCredential,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  type User
+  signInWithEmailAndPassword,
+  type User,
+  type UserCredential
 } from 'firebase/auth';
 import { auth } from '../firebase/Firebase';
 

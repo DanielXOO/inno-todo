@@ -1,4 +1,4 @@
-import { type Auth, type UserCredential, type User } from 'firebase/auth';
+import { type Auth, type User, type UserCredential } from 'firebase/auth';
 
 export default interface AuthContextModel {
   auth: Auth;
