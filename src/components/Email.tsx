@@ -19,7 +19,7 @@ const Email: React.FC<IEmailProps> = ({ field, errors }) => {
       label="Email"
       margin="normal"
       size="small"
-      error={!(errors.email == null)}
+      error={!(errors.email === null || errors.email === undefined)}
       helperText={errors.email?.message}
       sx={{
         width: '70%'
