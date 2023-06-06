@@ -6,19 +6,21 @@ import type User from '../models/user/User';
 
 type UserProps = User | UserSignUp;
 
-const Email: React.FC<{
+interface EmailProps {
   field: ControllerRenderProps<UserProps, 'email'>;
   errors: FieldErrors<UserProps>;
-}> = (data) => {
+}
+
+const Email: React.FC<EmailProps> = ({ field, errors }) => {
   return (
     <TextField
-      {...data.field}
+      {...field}
       variant="outlined"
       label="Email"
       margin="normal"
       size="small"
-      error={!(data.errors.email == null)}
-      helperText={data.errors.email?.message}
+      error={!(errors.email === null)}
+      helperText={errors.email?.message}
       sx={{
         width: '70%'
       }}

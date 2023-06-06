@@ -7,7 +7,7 @@ import {
   InputLabel,
   OutlinedInput
 } from '@mui/material';
-import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { type ControllerRenderProps, type FieldErrors } from 'react-hook-form';
 import type UserSignUp from '../models/user/UserSignUp';
 import type User from '../models/user/User';
@@ -16,11 +16,13 @@ type UserRenderProps =
   | ControllerRenderProps<UserSignUp, 'repeatPassword'>
   | ControllerRenderProps<User, 'password'>;
 
-const Password: React.FC<{
+interface PasswordProps {
   field: UserRenderProps;
   errors: FieldErrors<User>;
   label: string;
-}> = (data) => {
+}
+
+const Password: React.FC<PasswordProps> = ({ field, errors, label }) => {
   const [isPassword, setIsPassword] = useState<boolean>(true);
 
   const onChangeVisibility = (): void => {
@@ -32,12 +34,12 @@ const Password: React.FC<{
       size="small"
       sx={{ width: '70%', margin: '5px' }}
       variant="outlined"
-      error={data.errors.password?.message !== undefined}
+      error={errors.password?.message !== undefined}
     >
-      <InputLabel htmlFor="password">{data.label}</InputLabel>
+      <InputLabel htmlFor="password">{label}</InputLabel>
       <OutlinedInput
         id="password"
-        {...data.field}
+        {...field}
         type={isPassword ? 'password' : 'text'}
         endAdornment={
           <InputAdornment position="end">
@@ -49,9 +51,9 @@ const Password: React.FC<{
             </IconButton>
           </InputAdornment>
         }
-        label={data.label}
+        label={label}
       ></OutlinedInput>
-      <FormHelperText>{data.errors.password?.message}</FormHelperText>
+      <FormHelperText>{errors.password?.message}</FormHelperText>
     </FormControl>
   );
 };
