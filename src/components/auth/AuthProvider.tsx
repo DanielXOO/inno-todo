@@ -1,5 +1,4 @@
 import React, { type ReactNode, useContext, useEffect } from 'react';
-import type AuthContextState from '../../models/auth/AuthContextState';
 import type AuthContextModel from '../../models/auth/AuthContextModel';
 import {
   createUserWithEmailAndPassword,
@@ -7,11 +6,11 @@ import {
   type UserCredential
 } from 'firebase/auth';
 import { auth } from '../../firebase/Firebase';
-
-export const AuthStateContext = React.createContext<AuthContextState>({
-  isAuthenticated: false,
-  isLoading: false
-});
+import { useDispatch } from 'react-redux';
+import {
+  removeCurrentUser,
+  setCurrentUser
+} from '../../redux/Users/Actions/UserActions';
 
 const signIn = async (
   email: string,
@@ -43,13 +42,15 @@ export interface AuthProviderProps {
 export const useAuth = (): AuthContextModel => useContext(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
-  const userContext = useUserContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      userContext.id = user?.uid;
-      userContext.isLoading = false;
-      userContext.isAuthenticated = user !== null;
+      if (user === null) {
+        dispatch(removeCurrentUser());
+      } else {
+        dispatch(setCurrentUser());
+      }
     });
 
     return unsubscribe;
@@ -66,6 +67,3 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
     <AuthContext.Provider value={values}>{props.children}</AuthContext.Provider>
   );
 };
-
-export const useUserContext = (): AuthContextState =>
-  useContext(AuthStateContext);
