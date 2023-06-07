@@ -1,13 +1,12 @@
-import React, { type ReactNode, useContext, useEffect, useState } from 'react';
-import type AuthContextState from '../models/auth/AuthContextState';
-import type AuthContextModel from '../models/auth/AuthContextModel';
+import React, { type ReactNode, useContext, useEffect } from 'react';
+import type AuthContextState from '../../models/auth/AuthContextState';
+import type AuthContextModel from '../../models/auth/AuthContextModel';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  type User,
   type UserCredential
 } from 'firebase/auth';
-import { auth } from '../firebase/Firebase';
+import { auth } from '../../firebase/Firebase';
 
 export const AuthStateContext = React.createContext<AuthContextState>({
   isAuthenticated: false,
@@ -26,11 +25,15 @@ const signUp = async (
 ): Promise<UserCredential> =>
   await createUserWithEmailAndPassword(auth, email, password);
 
+const signOut = async (): Promise<void> => {
+  await auth.signOut();
+};
+
 export const AuthContext = React.createContext<AuthContextModel>({
   auth,
-  user: null,
   signIn,
-  signUp
+  signUp,
+  signOut
 });
 
 export interface AuthProviderProps {
@@ -40,11 +43,13 @@ export interface AuthProviderProps {
 export const useAuth = (): AuthContextModel => useContext(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
-  const [user, setUser] = useState<User | null>(null);
+  const userContext = useUserContext();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+      userContext.id = user?.uid;
+      userContext.isLoading = false;
+      userContext.isAuthenticated = user !== null;
     });
 
     return unsubscribe;
@@ -53,7 +58,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
   const values = {
     signIn,
     signUp,
-    user,
+    signOut,
     auth
   };
 

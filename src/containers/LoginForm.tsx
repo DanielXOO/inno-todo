@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
-import Email from '../components/Email';
-import Password from '../components/Password';
+import Email from '../components/ui/Email';
+import Password from '../components/ui/Password';
 import Logo from '../assets/images/logo.png';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import userSignInScheme from '../schemas/UserSignInScheme';
 import type User from '../models/user/User';
-import { useAuth } from '../auth/AuthProvider';
-import { authErrors } from '../auth/AuthErrors';
+import { useAuth } from '../components/auth/AuthProvider';
+import { authErrors } from '../models/auth/AuthErrors';
 import { type FirebaseError } from 'firebase/app';
-import Loader from '../components/Loader';
+import Loader from '../components/ui/Loader';
 
 const LoginForm: React.FC = () => {
   const {

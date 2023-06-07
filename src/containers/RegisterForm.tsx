@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import Logo from '../assets/images/logo.png';
-import Email from '../components/Email';
-import Password from '../components/Password';
+import Email from '../components/ui/Email';
+import Password from '../components/ui/Password';
 import { Controller, useForm } from 'react-hook-form';
 import type UserSignUp from '../models/user/UserSignUp';
 import userSignUpScheme from '../schemas/UserSignUpScheme';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuth } from '../auth/AuthProvider';
+import { useAuth } from '../components/auth/AuthProvider';
 import { type FirebaseError } from 'firebase/app';
-import { authErrors } from '../auth/AuthErrors';
-import Loader from '../components/Loader';
+import { authErrors } from '../models/auth/AuthErrors';
+import Loader from '../components/ui/Loader';
 
 const RegisterForm: React.FC = () => {
   const {
@@ -20,7 +20,7 @@ const RegisterForm: React.FC = () => {
     formState: { errors }
   } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
 
-  const { signUp } = useAuth();
+  const { signUp, signOut } = useAuth();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -28,6 +28,7 @@ const RegisterForm: React.FC = () => {
     setIsLoading(true);
     try {
       await signUp(data.email, data.password);
+      await signOut();
     } catch (_error: any) {
       const error: FirebaseError = _error;
       switch (error.code) {
