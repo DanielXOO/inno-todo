@@ -16,13 +16,13 @@ type UserRenderProps =
   | ControllerRenderProps<UserSignUp, 'repeatPassword'>
   | ControllerRenderProps<User, 'password'>;
 
-interface PasswordProps {
+interface IPasswordProps {
   field: UserRenderProps;
   errors: FieldErrors<User>;
   label: string;
 }
 
-const Password: React.FC<PasswordProps> = ({ field, errors, label }) => {
+const Password: React.FC<IPasswordProps> = ({ field, errors, label }) => {
   const [isPassword, setIsPassword] = useState<boolean>(true);
 
   const onChangeVisibility = (): void => {

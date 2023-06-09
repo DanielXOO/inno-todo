@@ -6,12 +6,12 @@ import type User from '../models/user/User';
 
 type UserProps = User | UserSignUp;
 
-interface EmailProps {
+interface IEmailProps {
   field: ControllerRenderProps<UserProps, 'email'>;
   errors: FieldErrors<UserProps>;
 }
 
-const Email: React.FC<EmailProps> = ({ field, errors }) => {
+const Email: React.FC<IEmailProps> = ({ field, errors }) => {
   return (
     <TextField
       {...field}
@@ -19,7 +19,7 @@ const Email: React.FC<EmailProps> = ({ field, errors }) => {
       label="Email"
       margin="normal"
       size="small"
-      error={!(errors.email === null)}
+      error={!(errors.email === null || errors.email === undefined)}
       helperText={errors.email?.message}
       sx={{
         width: '70%'
