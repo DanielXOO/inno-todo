@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Box, CircularProgress, Modal } from '@mui/material';
 
 interface ILoaderProps {
   children: React.ReactElement | React.ReactElement[] | string;
@@ -7,16 +7,40 @@ interface ILoaderProps {
   error?: string;
 }
 
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 300
+};
+
 const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
   if (error !== null && error !== undefined) {
-    return <Alert severity="error">{error}</Alert>;
+    const [open, setOpen] = React.useState(true);
+    const handleClose = (): void => {
+      setOpen(false);
+    };
+
+    return (
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Alert severity="error">{error}</Alert>
+        </Box>
+      </Modal>
+    );
   }
 
   if (isLoading) {
     return <CircularProgress />;
-  } else {
-    return <>{children}</>;
   }
+
+  return <>{children}</>;
 };
 
 export default Loader;

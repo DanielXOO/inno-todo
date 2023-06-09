@@ -38,6 +38,8 @@ const LoginForm: React.FC = () => {
           setError('email', { message: '' });
           setError('password', { message: 'Email or password is incorrect' });
           break;
+        default:
+          setError('password', { message: 'Bad request error' });
       }
     } finally {
       setIsLoading(false);

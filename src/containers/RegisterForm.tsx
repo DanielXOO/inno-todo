@@ -34,6 +34,8 @@ const RegisterForm: React.FC = () => {
         case authErrors.ALREADY_EXISTS:
           setError('email', { message: 'User already exists' });
           break;
+        default:
+          setError('repeatPassword', { message: 'Bad request error' });
       }
     } finally {
       setIsLoading(false);
