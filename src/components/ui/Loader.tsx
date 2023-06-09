@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, CircularProgress } from '@mui/material';
+import { Alert, Box, CircularProgress } from '@mui/material';
 
 interface ILoaderProps {
   children: React.ReactElement | React.ReactElement[] | string;
@@ -13,7 +13,17 @@ const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
   }
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+        sx={{ width: '100%' }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   } else {
     return <>{children}</>;
   }

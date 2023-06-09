@@ -45,31 +45,31 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{ width: '100%' }}
-    >
+    <Loader isLoading={isLoading}>
       <Box
         display="flex"
-        flexDirection="column"
-        alignItems="center"
         justifyContent="center"
-        sx={{
-          width: '400px',
-          minWidth: '300px',
-          minHeight: '450px',
-          borderRadius: '15px',
-          boxShadow: 3
-        }}
-        pb="50px"
-        pt="50px"
+        alignItems="center"
+        minHeight="100vh"
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ width: '100%' }}
       >
-        <Loader isLoading={isLoading}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            width: '400px',
+            minWidth: '300px',
+            minHeight: '450px',
+            borderRadius: '15px',
+            boxShadow: 3
+          }}
+          pb="50px"
+          pt="50px"
+        >
           <img src={Logo} width="30%" height="30%" alt="logo" />
           <Typography variant="h4" align="center" m="10px">
             InnoToDo
@@ -105,9 +105,9 @@ const LoginForm: React.FC = () => {
           >
             Log in
           </Button>
-        </Loader>
+        </Box>
       </Box>
-    </Box>
+    </Loader>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { type ReactNode, useContext, useEffect } from 'react';
+import React, { type ReactNode, useContext, useEffect, useState } from 'react';
 import type AuthContextModel from '../../models/auth/AuthContextModel';
 import {
   createUserWithEmailAndPassword,
@@ -32,7 +32,8 @@ export const AuthContext = React.createContext<AuthContextModel>({
   auth,
   signIn,
   signUp,
-  signOut
+  signOut,
+  isLoading: true
 });
 
 export interface AuthProviderProps {
@@ -43,24 +44,25 @@ export const useAuth = (): AuthContextModel => useContext(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    return auth.onAuthStateChanged((user) => {
       if (user === null) {
         dispatch(removeCurrentUser());
       } else {
         dispatch(setCurrentUser());
       }
+      setIsLoading(false);
     });
-
-    return unsubscribe;
-  });
+  }, [auth.currentUser]);
 
   const values = {
     signIn,
     signUp,
     signOut,
-    auth
+    auth,
+    isLoading
   };
 
   return (
