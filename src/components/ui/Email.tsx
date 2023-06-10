@@ -1,8 +1,8 @@
 import React from 'react';
 import { TextField } from '@mui/material';
 import { type ControllerRenderProps, type FieldErrors } from 'react-hook-form';
-import type UserSignUp from '../models/user/UserSignUp';
-import type User from '../models/user/User';
+import type UserSignUp from '../../models/user/UserSignUp';
+import type User from '../../models/user/User';
 
 type UserProps = User | UserSignUp;
 

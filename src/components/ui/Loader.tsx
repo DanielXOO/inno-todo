@@ -37,7 +37,16 @@ const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
   }
 
   if (isLoading) {
-    return <CircularProgress />;
+    return (
+      <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      sx={{ width: '100%' }}
+    >
+      <CircularProgress />
+    </Box>);
   }
 
   return <>{children}</>;

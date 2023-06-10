@@ -1,19 +1,16 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import LoginForm from './containers/LoginForm';
-import RegisterForm from './containers/RegisterForm';
-import { AuthProvider } from './auth/AuthProvider';
+import { AuthProvider } from './components/auth/AuthProvider';
+import { Provider } from 'react-redux';
+import { Store } from './redux/store';
+import AppRoutes from './components/router/AppRoutes';
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/signin" element={<LoginForm />} />
-          <Route path="/signup" element={<RegisterForm />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+    <Provider store={Store}>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </Provider>
   );
 };
 

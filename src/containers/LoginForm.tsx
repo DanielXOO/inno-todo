@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
-import Email from '../components/Email';
-import Password from '../components/Password';
+import Email from '../components/ui/Email';
+import Password from '../components/ui/Password';
 import Logo from '../assets/images/logo.png';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import userSignInScheme from '../schemas/UserSignInScheme';
 import type User from '../models/user/User';
-import { useAuth } from '../auth/AuthProvider';
-import { authErrors } from '../auth/AuthErrors';
+import { useAuth } from '../components/auth/AuthProvider';
+import { authErrors } from '../models/auth/AuthErrors';
 import { type FirebaseError } from 'firebase/app';
-import Loader from '../components/Loader';
+import Loader from '../components/ui/Loader';
 
 const LoginForm: React.FC = () => {
   const {
@@ -47,31 +47,31 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="100vh"
-      component="form"
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{ width: '100%' }}
-    >
+    <Loader isLoading={isLoading}>
       <Box
         display="flex"
-        flexDirection="column"
-        alignItems="center"
         justifyContent="center"
-        sx={{
-          width: '400px',
-          minWidth: '300px',
-          minHeight: '450px',
-          borderRadius: '15px',
-          boxShadow: 3
-        }}
-        pb="50px"
-        pt="50px"
+        alignItems="center"
+        minHeight="100vh"
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        sx={{ width: '100%' }}
       >
-        <Loader isLoading={isLoading}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            width: '400px',
+            minWidth: '300px',
+            minHeight: '450px',
+            borderRadius: '15px',
+            boxShadow: 3
+          }}
+          pb="50px"
+          pt="50px"
+        >
           <img src={Logo} width="30%" height="30%" alt="logo" />
           <Typography variant="h4" align="center" m="10px">
             InnoToDo
@@ -107,9 +107,9 @@ const LoginForm: React.FC = () => {
           >
             Log in
           </Button>
-        </Loader>
+        </Box>
       </Box>
-    </Box>
+    </Loader>
   );
 };
 
