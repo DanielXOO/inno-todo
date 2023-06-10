@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LoginForm from '../../containers/LoginForm';
-import ProtectedRoute from './ProtectedRoute';
 import RegisterForm from '../../containers/RegisterForm';
 import { useAuth } from '../auth/AuthProvider';
 import Loader from '../ui/Loader';
