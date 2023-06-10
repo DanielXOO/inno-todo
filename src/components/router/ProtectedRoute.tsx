@@ -12,7 +12,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   redirectPath
 }) => {
-  const isAuthenticated = useSelector(
+  const isAuthenticated: boolean = useSelector(
     (user: CurrentUser) => user.isAuthenticated
   );
 
