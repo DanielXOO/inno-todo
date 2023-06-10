@@ -14,14 +14,7 @@ const AppRoutes: React.FC = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/signin" element={<LoginForm />} />
-          <Route
-            path="/signup"
-            element={
-              <ProtectedRoute redirectPath="/signin">
-                <RegisterForm />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/signup" element={<RegisterForm />} />
         </Routes>
       </BrowserRouter>
     </Loader>
