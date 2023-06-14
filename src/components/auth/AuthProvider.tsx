@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   type UserCredential
 } from 'firebase/auth';
-import { auth } from '../../firebase/Firebase';
+import { auth } from '../../firebase/core/Firebase';
 import { useDispatch } from 'react-redux';
 import {
   removeCurrentUser,

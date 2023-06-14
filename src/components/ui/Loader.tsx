@@ -1,19 +1,15 @@
 import React from 'react';
 import { Alert, Box, CircularProgress, Modal } from '@mui/material';
+import {
+  alertBoxStyle,
+  loaderBoxStyle
+} from '../../styles/components/Loader.styles';
 
 interface ILoaderProps {
   children: React.ReactElement | React.ReactElement[] | string;
   isLoading: boolean;
   error?: string;
 }
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 300
-};
 
 const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
   if (error !== null && error !== undefined) {
@@ -29,7 +25,7 @@ const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={alertBoxStyle}>
           <Alert severity="error">{error}</Alert>
         </Box>
       </Modal>
@@ -38,13 +34,7 @@ const Loader: React.FC<ILoaderProps> = ({ error, isLoading, children }) => {
 
   if (isLoading) {
     return (
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-        sx={{ width: '100%' }}
-      >
+      <Box sx={loaderBoxStyle}>
         <CircularProgress />
       </Box>
     );

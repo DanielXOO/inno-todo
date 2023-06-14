@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import Logo from '../assets/images/logo.png';
 import Email from '../components/ui/Email';
@@ -11,8 +11,15 @@ import { useAuth } from '../components/auth/AuthProvider';
 import { type FirebaseError } from 'firebase/app';
 import { authErrors } from '../models/auth/AuthErrors';
 import Loader from '../components/ui/Loader';
+import { useSelector } from 'react-redux';
+import type CurrentUser from '../models/user/CurrentUser';
+import { Navigate } from 'react-router-dom';
+import {
+  formBoxStyle,
+  mainBoxStyle
+} from '../styles/containers/RegisterContainer.styles';
 
-const RegisterForm: React.FC = () => {
+const RegisterContainer: React.FC = () => {
   const {
     handleSubmit,
     control,
@@ -21,8 +28,17 @@ const RegisterForm: React.FC = () => {
   } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
 
   const { signUp, signOut } = useAuth();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [doRedirect, setDoRedirect] = useState<boolean>(false);
+  const isAuthenticated: boolean = useSelector(
+    (user: CurrentUser) => user.isAuthenticated
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setDoRedirect(true);
+    }
+  }, [isAuthenticated]);
 
   const onSubmit = async (data: UserSignUp): Promise<void> => {
     setIsLoading(true);
@@ -43,32 +59,14 @@ const RegisterForm: React.FC = () => {
     }
   };
 
+  if (doRedirect) {
+    return <Navigate to="/tasks" replace />;
+  }
+
   return (
     <Loader isLoading={isLoading}>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{ width: '100%' }}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            width: '400px',
-            minWidth: '300px',
-            minHeight: '450px',
-            borderRadius: '15px',
-            boxShadow: 3
-          }}
-          pb="50px"
-          pt="50px"
-        >
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={mainBoxStyle}>
+        <Box sx={formBoxStyle}>
           <img src={Logo} width="30%" height="30%" alt="logo" />
           <Typography variant="h4" align="center" m="10px">
             InnoToDo
@@ -122,4 +120,4 @@ const RegisterForm: React.FC = () => {
   );
 };
 
-export default RegisterForm;
+export default RegisterContainer;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Link, Typography } from '@mui/material';
 import Email from '../components/ui/Email';
 import Password from '../components/ui/Password';
@@ -11,8 +11,15 @@ import { useAuth } from '../components/auth/AuthProvider';
 import { authErrors } from '../models/auth/AuthErrors';
 import { type FirebaseError } from 'firebase/app';
 import Loader from '../components/ui/Loader';
+import { useSelector } from 'react-redux';
+import type CurrentUser from '../models/user/CurrentUser';
+import { Navigate } from 'react-router-dom';
+import {
+  formBoxStyle,
+  mainBoxStyle
+} from '../styles/containers/LoginContainer.styles';
 
-const LoginForm: React.FC = () => {
+const LoginContainer: React.FC = () => {
   const {
     handleSubmit,
     setError,
@@ -22,12 +29,19 @@ const LoginForm: React.FC = () => {
     resolver: yupResolver(userSignInScheme)
   });
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { signIn, isLoading } = useAuth();
+  const [doRedirect, setDoRedirect] = useState<boolean>(false);
+  const isAuthenticated: boolean = useSelector(
+    (user: CurrentUser) => user.isAuthenticated
+  );
 
-  const { signIn } = useAuth();
+  useEffect(() => {
+    if (isAuthenticated) {
+      setDoRedirect(true);
+    }
+  }, [isAuthenticated]);
 
   const onSubmit = async (data: User): Promise<void> => {
-    setIsLoading(true);
     try {
       await signIn(data.email, data.password);
     } catch (_error: any) {
@@ -41,37 +55,17 @@ const LoginForm: React.FC = () => {
         default:
           setError('password', { message: 'Bad request error' });
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 
+  if (doRedirect) {
+    return <Navigate to="/tasks" replace />;
+  }
+
   return (
     <Loader isLoading={isLoading}>
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        minHeight="100vh"
-        component="form"
-        onSubmit={handleSubmit(onSubmit)}
-        sx={{ width: '100%' }}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          sx={{
-            width: '400px',
-            minWidth: '300px',
-            minHeight: '450px',
-            borderRadius: '15px',
-            boxShadow: 3
-          }}
-          pb="50px"
-          pt="50px"
-        >
+      <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={mainBoxStyle}>
+        <Box sx={formBoxStyle}>
           <img src={Logo} width="30%" height="30%" alt="logo" />
           <Typography variant="h4" align="center" m="10px">
             InnoToDo
@@ -113,4 +107,4 @@ const LoginForm: React.FC = () => {
   );
 };
 
-export default LoginForm;
+export default LoginContainer;
