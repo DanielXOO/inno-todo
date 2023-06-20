@@ -51,7 +51,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = (props) => {
       if (user === null) {
         dispatch(removeCurrentUser());
       } else {
-        dispatch(setCurrentUser());
+        dispatch(setCurrentUser(user.uid));
       }
       setIsLoading(false);
     });

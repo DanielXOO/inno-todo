@@ -10,7 +10,7 @@ export const mainBoxStyle = {
 export const calendarBoxStyle = {
   display: 'flex',
   justifyContent: 'center',
-  minHeight: '100%',
+  height: '30%',
   width: '20%',
   minWidth: '350px',
   borderRadius: '15px',
@@ -20,8 +20,10 @@ export const calendarBoxStyle = {
 
 export const tasksBoxStyle = {
   display: 'flex',
-  justifyContent: 'center',
-  minHeight: '100%',
+  justifyContent: 'begin',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  height: 'auto',
   width: '80%',
   margin: '20px'
 };

@@ -1,10 +1,12 @@
-import { type Action } from 'redux';
-import { UserActionsTypes } from './UserActionsTypes';
+import { type ActionWithPayload, UserActionsTypes } from './UserActionsTypes';
 
-export const setCurrentUser = (): Action => ({
-  type: UserActionsTypes.setCurrentUser
+type UserActionWithPayload = ActionWithPayload<UserActionsTypes, string>;
+
+export const setCurrentUser = (userId: string): UserActionWithPayload => ({
+  type: UserActionsTypes.setCurrentUser,
+  payload: userId
 });
 
-export const removeCurrentUser = (): Action => ({
+export const removeCurrentUser = (): UserActionWithPayload => ({
   type: UserActionsTypes.removeCurrentUser
 });

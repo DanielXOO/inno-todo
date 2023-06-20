@@ -6,6 +6,7 @@ import { useAuth } from '../auth/AuthProvider';
 import Loader from '../ui/Loader';
 import TasksContainer from '../../containers/TasksContainer';
 import ProtectedRoute from './ProtectedRoute';
+import { TasksProvider } from '../../firebase/tasks/TaskServiceProvider';
 
 const AppRoutes: React.FC = () => {
   const { isLoading } = useAuth();
@@ -20,7 +21,9 @@ const AppRoutes: React.FC = () => {
             path="/tasks"
             element={
               <ProtectedRoute redirectPath="/signin">
-                <TasksContainer />
+                <TasksProvider>
+                  <TasksContainer />
+                </TasksProvider>
               </ProtectedRoute>
             }
           />
