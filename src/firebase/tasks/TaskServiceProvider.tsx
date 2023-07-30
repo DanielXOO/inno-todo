@@ -3,15 +3,19 @@ import { fireStore } from '../core/Firebase';
 import type Task from '../../models/task/Task';
 import {
   collection,
+  deleteDoc,
   getDocs,
   limit,
+  onSnapshot,
+  orderBy,
   query,
-  where,
-  orderBy
+  where
 } from 'firebase/firestore';
 import type TaskContextModel from '../../models/task/TaskContextModel';
+import firebase from 'firebase/compat/app';
+import Unsubscribe = firebase.Unsubscribe;
 
-const getById = async (id: string): Promise<Task> => {
+const getTaskById = async (id: string): Promise<Task> => {
   const collectionRef = collection(fireStore, 'tasks');
   const firebaseQuery = query(collectionRef, where('id', '==', id), limit(1));
   const documentsData = await getDocs(firebaseQuery);
@@ -19,7 +23,39 @@ const getById = async (id: string): Promise<Task> => {
   return documentsData.docs[0].data() as Task;
 };
 
-const getByUserIdAndDate = async (id: string, date: Date): Promise<Task[]> => {
+const deleteTaskById = async (id: string): Promise<void> => {
+  const collectionRef = collection(fireStore, 'tasks');
+  const firebaseQuery = query(collectionRef, where('id', '==', id), limit(1));
+  const documentsData = await getDocs(firebaseQuery);
+  await deleteDoc(documentsData.docs[0].ref);
+};
+
+const onTaskSnapshot = (
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>,
+  userId: string
+): Unsubscribe => {
+  const currentUserQuery = query(
+    collection(fireStore, 'tasks'),
+    where('userId', '==', userId)
+  );
+
+  return onSnapshot(
+    currentUserQuery,
+    { includeMetadataChanges: true },
+    (querySnapshot) => {
+      const tasks: Task[] = [];
+      querySnapshot.forEach((doc) => {
+        tasks.push(doc.data() as Task);
+      });
+      setTasks(tasks);
+    }
+  );
+};
+
+const getTaskByUserIdAndDate = async (
+  id: string,
+  date: Date
+): Promise<Task[]> => {
   const collectionRef = collection(fireStore, 'tasks');
 
   date = new Date(date);
@@ -52,8 +88,10 @@ const getByUserIdAndDate = async (id: string, date: Date): Promise<Task[]> => {
 };
 
 export const TaskContext = React.createContext<TaskContextModel>({
-  getById,
-  getByUserIdAndDate
+  getTaskById,
+  getTaskByUserIdAndDate,
+  deleteTaskById,
+  onTaskSnapshot
 });
 
 export const useTasks = (): TaskContextModel => useContext(TaskContext);
@@ -64,8 +102,10 @@ export interface TasksProviderProps {
 
 export const TasksProvider: React.FC<TasksProviderProps> = (props) => {
   const values = {
-    getById,
-    getByUserIdAndDate
+    getTaskById,
+    getTaskByUserIdAndDate,
+    deleteTaskById,
+    onTaskSnapshot
   };
 
   return (

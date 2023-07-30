@@ -16,15 +16,19 @@ import type Task from '../models/task/Task';
 import TaskPreviewCard from '../components/ui/TaskPreviewCard';
 
 const TasksContainer: React.FC = () => {
-  const { getByUserIdAndDate } = useTasks();
+  const { getTaskByUserIdAndDate } = useTasks();
   const userId = useSelector((user: CurrentUser) => user.currentUserId);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [tasksList, setTasksList] = useState<JSX.Element[]>([]);
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
+  /* useEffect(() => {
+    return onTaskSnapshot(setTasks, userId ?? '');
+  }); */
+
   useEffect(() => {
     const loadTasks = async (): Promise<void> => {
-      const tasksResponse = await getByUserIdAndDate(
+      const tasksResponse = await getTaskByUserIdAndDate(
         userId ?? '',
         selectedDate ?? new Date()
       );

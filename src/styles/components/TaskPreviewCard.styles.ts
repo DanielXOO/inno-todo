@@ -3,10 +3,10 @@ export const taskPreviewCardStyle = {
   flexDirection: 'column',
   borderRadius: '15px',
   boxShadow: 3,
-  padding: '30px',
-  marginLeft: '35px',
-  marginRight: '35px',
-  marginBottom: '40px',
+  padding: '25px',
+  marginLeft: '15px',
+  marginRight: '15px',
+  marginBottom: '30px',
   width: '250px',
-  height: 'auto'
+  height: '250px'
 };
