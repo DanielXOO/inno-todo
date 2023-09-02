@@ -1,19 +1,19 @@
 import type CurrentUser from '../../../models/user/CurrentUser';
 import {
-  type ActionWithPayload,
+  type UserActionWithPayload,
   UserActionsTypes
 } from '../Actions/UserActionsTypes';
 
-const initUser: CurrentUser = {
+const initState: CurrentUser = {
   currentUserId: null,
   isAuthenticated: false
 };
 
-type UserActionWithPayload = ActionWithPayload<UserActionsTypes, string>;
+type UserAction = UserActionWithPayload<UserActionsTypes, string>;
 
 export const UserReducer = (
-  user: CurrentUser = initUser,
-  action: UserActionWithPayload
+  user: CurrentUser = initState,
+  action: UserAction
 ): CurrentUser => {
   switch (action.type) {
     case UserActionsTypes.setCurrentUser:

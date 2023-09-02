@@ -1,12 +1,18 @@
-import { type ActionWithPayload, UserActionsTypes } from './UserActionsTypes';
+import {
+  type UserActionWithPayload,
+  UserActionsTypes
+} from './UserActionsTypes';
 
-type UserActionWithPayload = ActionWithPayload<UserActionsTypes, string>;
-
-export const setCurrentUser = (userId: string): UserActionWithPayload => ({
+export const setCurrentUser = (
+  userId: string
+): UserActionWithPayload<UserActionsTypes, string> => ({
   type: UserActionsTypes.setCurrentUser,
   payload: userId
 });
 
-export const removeCurrentUser = (): UserActionWithPayload => ({
+export const removeCurrentUser = (): UserActionWithPayload<
+  UserActionsTypes,
+  string
+> => ({
   type: UserActionsTypes.removeCurrentUser
 });

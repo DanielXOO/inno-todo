@@ -25,7 +25,9 @@ const RegisterContainer: React.FC = () => {
     control,
     setError,
     formState: { errors }
-  } = useForm<UserSignUp>({ resolver: yupResolver(userSignUpScheme) });
+  } = useForm<UserSignUp>({
+    resolver: yupResolver<UserSignUp>(userSignUpScheme)
+  });
 
   const { signUp, signOut } = useAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);

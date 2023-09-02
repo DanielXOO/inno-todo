@@ -3,7 +3,7 @@ export const enum UserActionsTypes {
   removeCurrentUser = 'removeCurrentUser'
 }
 
-export interface ActionWithPayload<Type extends UserActionsTypes, Payload> {
+export interface UserActionWithPayload<Type extends UserActionsTypes, Payload> {
   type: Type;
   payload?: Payload;
 }
